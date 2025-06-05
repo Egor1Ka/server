@@ -6,7 +6,13 @@ const createProduct = async (product) => {
 
 const getProductById = async (id) => {
   return await Product.findById(id)
-    .populate("categoryId")
+    .populate({
+      path: "categoryId",
+      populate: {
+        path: "attributes",
+        model: "Attribute",
+      },
+    })
     .populate("tags")
     .populate("userId");
 };

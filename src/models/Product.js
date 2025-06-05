@@ -1,29 +1,42 @@
 import mongoose from "mongoose";
-
 const { Schema, model, ObjectId } = mongoose;
 
 const ImageSchema = new Schema(
   {
-    image: { type: String, required: true }, // base64 или dataURL
-    imageType: { type: String, required: true }, // например "image/png"
+    image: { type: String, required: true },
+    imageType: { type: String, required: true },
   },
-  { _id: false } // если не нужен отдельный _id на каждую картинку
+  { _id: false }
+);
+
+const VariantAttributeSchema = new Schema(
+  {
+    attribute: {
+      type: Schema.Types.ObjectId,
+      ref: "Attribute",
+      required: true,
+    },
+    value: {
+      type: Schema.Types.ObjectId,
+      ref: "AttributeValue",
+      required: true,
+    },
+  },
+  { _id: false }
 );
 
 const VariantSchema = new Schema(
   {
     quantity: Number,
     sku: { type: String, required: true },
-    attributes: { type: Map, of: String, default: {} }, // динамические атрибуты
+    attributes: [VariantAttributeSchema], // Вот тут массив ссылок!
     images: [ImageSchema],
     currency: {
       type: ObjectId,
       ref: "Currency",
-      default: null,
       required: true,
     },
     price: { type: Number, required: true },
-    quantity: { type: Number, default: 0 },
   },
   { _id: true }
 );
@@ -43,7 +56,6 @@ const ProductSchema = new Schema(
     currency: {
       type: ObjectId,
       ref: "Currency",
-      default: null,
       required: true,
     },
     tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
@@ -52,8 +64,7 @@ const ProductSchema = new Schema(
       enum: ["draft", "published", "archived"],
       default: "draft",
     },
-    attributes: [{ type: Map, of: Schema.Types.Mixed }],
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: false },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     variants: [VariantSchema],
   },
   { timestamps: true }

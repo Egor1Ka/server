@@ -1,20 +1,5 @@
 import mongoose from "mongoose";
-import { attributeTypes } from "../utils/constants/attribute.js";
-
 const { Schema, model } = mongoose;
-
-const AttributeSchema = new Schema(
-  {
-    name: { type: String, required: true }, // "Ширина", "Материал"
-    type: {
-      type: String,
-      unique: false,
-      enum: attributeTypes,
-      default: "string",
-    },
-  },
-  { _id: false }
-);
 
 const CategorySchema = new Schema(
   {
@@ -29,8 +14,8 @@ const CategorySchema = new Schema(
     },
     slug: { type: String, required: true, unique: true },
     parentId: { type: Schema.Types.ObjectId, ref: "Category", default: null },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: false },
-    attributes: [AttributeSchema],
+    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+    attributes: [{ type: Schema.Types.ObjectId, ref: "Attribute" }], // просто ссылки на Attribute
   },
   { timestamps: true }
 );

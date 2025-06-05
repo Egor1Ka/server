@@ -6,6 +6,7 @@ import {
   getCategories,
   updateCategory,
   deleteCategory,
+  getCategoryAttributes,
 } from "../../controllers/categoryController.js";
 import multer from "multer";
 
@@ -17,5 +18,6 @@ router.get("/", getCategories);
 router.get("/:id", getCategory);
 router.put("/:id", upload.single("image"), updateCategory);
 router.delete("/:id", deleteCategory);
+router.get("/:id/attributes", getCategoryAttributes);
 
 export default router;

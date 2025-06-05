@@ -119,7 +119,23 @@ const deleteCategory = async (req, res) => {
   }
 };
 
+const getCategoryAttributes = async (req, res) => {
+  try {
+    const data = await categoryServices.getCategoryAttributesWithValues(
+      req.params.id
+    );
+    if (!data) {
+      httpResponseError(res, generalStatus.NOT_FOUND, "Category not found");
+      return;
+    }
+    httpResponse(res, generalStatus.SUCCESS, data);
+  } catch (error) {
+    httpResponseError(res, error);
+  }
+};
+
 export {
+  getCategoryAttributes,
   createCategory,
   getCategory,
   getCategories,
