@@ -43,7 +43,12 @@ const deleteCategory = async (id) => {
   return await categoryRepository.deleteCategory(id);
 };
 
+const getCategoryAttributesWithValues = async (id) => {
+  return await categoryRepository.getCategoryAttributesWithValues(id);
+};
+
 export default {
+  getCategoryAttributesWithValues,
   createCategory,
   getCategoryById,
   getCategories,

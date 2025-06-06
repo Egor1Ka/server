@@ -5,6 +5,8 @@ import categoryRoutes from "./subroutes/categoryRoutes.js";
 import tagRoutes from "./subroutes/tagRoutes.js";
 import productRoutes from "./subroutes/productRoutes.js";
 import currencyRoutes from "./subroutes/currency.js";
+import attributeRoutes from "./subroutes/attributesRouter.js";
+import attributeValueRoutes from "./subroutes/attributesValueRouter.js";
 
 const router = express.Router();
 
@@ -16,6 +18,8 @@ router.use("/category", categoryRoutes);
 router.use("/tag", tagRoutes);
 router.use("/product", productRoutes);
 router.use("/currency", currencyRoutes);
+router.use("/attribute", attributeRoutes);
+router.use("/attribute-values", attributeValueRoutes);
 // router.use("/user", userRoute);
 // router.use("/auth", authRoute);
 
