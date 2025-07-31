@@ -1,4 +1,5 @@
 import categoryRepository from "../repository/category.js";
+import S3Service from "../S3.js";
 
 const createCategory = async ({
   name,
@@ -36,7 +37,17 @@ const getCategories = async (filter = {}) => {
 };
 
 const updateCategory = async (id, update) => {
-  return await categoryRepository.updateCategory(id, update);
+  const { image } = update;
+  const { url } = await S3Service.base64Upload(image);
+
+  const updatedCategory = {
+    ...update,
+    image: { url },
+  };
+
+  console.log("updatedCategory", updatedCategory);
+
+  return await categoryRepository.updateCategory(id, updatedCategory);
 };
 
 const deleteCategory = async (id) => {

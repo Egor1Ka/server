@@ -5,7 +5,9 @@ const CategorySchema = new Schema(
   {
     name: { type: String, required: true },
     description: { type: String },
-    image: { type: Buffer },
+    image: {
+      url: { type: String, required: false },
+    },
     imageType: { type: String },
     status: {
       type: String,

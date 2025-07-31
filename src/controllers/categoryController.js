@@ -72,11 +72,7 @@ const getCategories = async (req, res) => {
   try {
     const filter = {}; // фильтры по необходимости
     const categories = await categoryServices.getCategories(filter);
-    const result = categories.map((cat) => ({
-      ...cat.toObject(),
-      image: cat.image ? cat.image.toString("base64") : null,
-    }));
-    httpResponse(res, generalStatus.SUCCESS, result);
+    httpResponse(res, generalStatus.SUCCESS, categories);
   } catch (error) {
     httpResponseError(res, error);
   }
@@ -85,13 +81,10 @@ const getCategories = async (req, res) => {
 // Обновить категорию
 const updateCategory = async (req, res) => {
   try {
-    const { image, ...rest } = req.body;
-    // image если есть, конвертируй в буфер!
-    const imageBuffer = image ? Buffer.from(image, "base64") : undefined;
+    const { ...rest } = req.body;
 
     const category = await categoryServices.updateCategory(req.params.id, {
       ...rest,
-      image: imageBuffer,
     });
 
     if (!category) {
