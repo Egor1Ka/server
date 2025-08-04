@@ -25,8 +25,6 @@ const createCategory = async (req, res) => {
       return;
     }
 
-    const imageBuffer = image ? Buffer.from(image, "base64") : undefined;
-
     const category = await categoryServices.createCategory({
       status,
       description,
@@ -34,7 +32,7 @@ const createCategory = async (req, res) => {
       name,
       slug,
       parentId,
-      image: imageBuffer,
+      image,
       imageType,
       //createdBy,
     });
@@ -44,11 +42,8 @@ const createCategory = async (req, res) => {
   }
 };
 
-// Получить одну категорию
 const getCategory = async (req, res) => {
   try {
-    console.log("getCategoryById", typeof req.params.id);
-    console.log("getCategoryById", req.params.id);
     const category = await categoryServices.getCategoryById(req.params.id);
 
     if (!category) {
@@ -58,7 +53,6 @@ const getCategory = async (req, res) => {
 
     const result = {
       ...category.toObject(),
-      image: category.image ? category.image.toString("base64") : null,
     };
 
     httpResponse(res, generalStatus.SUCCESS, result);

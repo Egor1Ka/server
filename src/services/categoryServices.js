@@ -1,5 +1,6 @@
 import categoryRepository from "../repository/category.js";
 import S3Service from "../S3.js";
+import { isValidUrl } from "../utils/links.js";
 
 const createCategory = async ({
   name,
@@ -12,11 +13,12 @@ const createCategory = async ({
   imageType,
   createdBy,
 }) => {
-  // Тут можно делать бизнес-валидацию (например, запрещать дубли слуг/имён)
+  const { url } = await S3Service.base64Upload(image.url);
+
   const category = {
     status,
     description,
-    image,
+    image: { url },
     imageType,
     attributes,
     name,
@@ -38,14 +40,14 @@ const getCategories = async (filter = {}) => {
 
 const updateCategory = async (id, update) => {
   const { image } = update;
-  const { url } = await S3Service.base64Upload(image);
+
+  const isUrl = isValidUrl(image.url);
+  const { url } = isUrl ? image : await S3Service.base64Upload(image.url);
 
   const updatedCategory = {
     ...update,
     image: { url },
   };
-
-  console.log("updatedCategory", updatedCategory);
 
   return await categoryRepository.updateCategory(id, updatedCategory);
 };
