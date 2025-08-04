@@ -3,8 +3,8 @@ const { Schema, model, ObjectId } = mongoose;
 
 const ImageSchema = new Schema(
   {
-    image: { type: String, required: true },
-    imageType: { type: String, required: true },
+    url: { type: String, required: true },
+    imageType: { type: String, required: false },
   },
   { _id: false }
 );

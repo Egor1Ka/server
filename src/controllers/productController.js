@@ -1,8 +1,9 @@
 import { httpResponse, httpResponseError } from "../utils/http/httpResponse.js";
 import { generalStatus } from "../utils/http/httpStatus.js";
 import productServices from "../services/productServices.js";
+import { isValidUrl } from "../utils/links.js";
+import S3Service from "../S3.js";
 
-// Создать продукт
 const createProduct = async (req, res) => {
   try {
     const {
@@ -26,10 +27,20 @@ const createProduct = async (req, res) => {
       );
       return;
     }
-    // const userId = req.user._id; // authorize должен устанавливать req.user
+
+    const uploadImages = await Promise.all(
+      images.map(async (image) => {
+        const { url } = isValidUrl(image.url)
+          ? image
+          : await S3Service.base64Upload(image.url);
+        return { url };
+      })
+    );
+
+    console.log(uploadImages);
 
     const product = await productServices.createProduct({
-      images,
+      images: uploadImages,
       name,
       currency,
       description,
@@ -51,7 +62,6 @@ const createProduct = async (req, res) => {
 // Получить один продукт
 const getProduct = async (req, res) => {
   try {
-    console.log("req.params.id", req.params.id);
     const product = await productServices.getProductById(req.params.id);
     if (!product) {
       httpResponseError(res, generalStatus.NOT_FOUND, "Product not found");
