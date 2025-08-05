@@ -7,6 +7,7 @@ import productRoutes from "./subroutes/productRoutes.js";
 import currencyRoutes from "./subroutes/currency.js";
 import attributeRoutes from "./subroutes/attributesRouter.js";
 import attributeValueRoutes from "./subroutes/attributesValueRouter.js";
+import orderRoutes from "./subroutes/orderRoutes.js";
 
 const router = express.Router();
 
@@ -20,6 +21,8 @@ router.use("/product", productRoutes);
 router.use("/currency", currencyRoutes);
 router.use("/attribute", attributeRoutes);
 router.use("/attribute-values", attributeValueRoutes);
+router.use("/order", orderRoutes);
+
 // router.use("/user", userRoute);
 // router.use("/auth", authRoute);
 
